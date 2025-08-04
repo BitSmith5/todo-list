@@ -56,7 +56,7 @@ export default function App() {
         onKeyDown={(e) => {
           if (e.key === "Enter") addTodo();
         }}
-        placeholder="Enter your todo..."
+        placeholder={editingId ? "Edit todo here..." : "Enter your todo..."}
       />
       <button className="mx-3 hover:text-green-400" onClick={addTodo}>Add</button>
       <TodoList
