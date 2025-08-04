@@ -20,6 +20,7 @@ export default function App() {
   const [todos, setTodos] = useState<Todo[]>(loadInitialTodos);
   const [text, setText] = useState<string>("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<"all" | "complete" | "incomplete">("all");
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -66,22 +67,41 @@ export default function App() {
     setTodos((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const getFilteredTodos = () => {
+    if (selectedFilter === "all") return todos;
+    if (selectedFilter === "complete") return todos.filter(t => t.completed);
+    if (selectedFilter === "incomplete") return todos.filter(t => !t.completed);
+    return todos;
+  }
+
   return (
     <div className="App bg-gray-600 text-white min-h-screen p-4">
       <h1 className="text-3xl font-bold mb-4">Todo List</h1>
-      <input
+      <select
         className="border p-2 rounded text-black"
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") addTodo();
-        }}
-        placeholder={editingId ? "Edit todo here..." : "Enter your todo..."}
-      />
-      <button className="mx-3 hover:text-green-400" onClick={addTodo}>Add</button>
+        value={selectedFilter}
+        onChange={(e) => {setSelectedFilter(e.target.value as "all" | "complete" | "incomplete")}}
+      >
+        <option value="all">All</option>
+        <option value="complete">Complete</option>
+        <option value="incomplete">Incomplete</option>
+      </select>
+      <div className="my-2 flex flex-center justify-start">
+        <input
+          className="border p-2 rounded text-black"
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") addTodo();
+          }}
+          placeholder={editingId ? "Edit todo here..." : "Enter your todo..."}
+        />
+        <button className="mx-3 hover:text-green-400" onClick={addTodo}>Add</button>
+      </div>
+      
       <TodoList
-        todos={todos}
+        todos={getFilteredTodos()}
         onToggle={toggleTodo}
         onEdit={onEdit}
         onDelete={deleteTodo}
