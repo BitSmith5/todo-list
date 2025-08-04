@@ -9,7 +9,7 @@ type TodoItemProps = {
 
 export function TodoItem({ todo, onToggle, onEdit, onDelete }: TodoItemProps) {
   return (
-    <li className="flex w-1/3 items-center justify-start gap-2 p-2 border-b border-gray-500">
+    <li className={`flex w-1/3 items-center justify-start gap-2 p-2 border-b border-gray-500 ${todo.isEditing ? "italic text-gray-400" : "text-white"}`}>
       <input
         type="checkbox"
         checked={todo.completed}

@@ -33,11 +33,14 @@ export default function App() {
 
   const onEdit = (id: string ) => {
     setEditingId(id);
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, isEditing: true } : t))
+    );
   }
 
   const editTodo = (id: string, text: string) => {
     setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, text: text } : t))
+      prev.map((t) => (t.id === id ? { ...t, text: text, isEditing: false } : t))
     );
   };
 
