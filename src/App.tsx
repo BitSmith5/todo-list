@@ -1,11 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Todo } from "../src/types";
 import { TodoList } from "../src/components/TodoList";
 
+// Helper function to load initial todos
+const loadInitialTodos = (): Todo[] => {
+  try {
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      return JSON.parse(storedTodos);
+    }
+    return [];
+  } catch (error) {
+    console.error("Error loading todos from localStorage:", error);
+    return [];
+  }
+};
+
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(loadInitialTodos);
   const [text, setText] = useState<string>("");
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (text === "") return;
