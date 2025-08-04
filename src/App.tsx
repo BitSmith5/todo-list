@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Todo } from "../src/types";
 import { TodoList } from "../src/components/TodoList";
 
